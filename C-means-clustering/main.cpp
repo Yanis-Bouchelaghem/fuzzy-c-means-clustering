@@ -4,7 +4,7 @@
 int main()
 {
     // Load the image in grayscale (black and white)
-    GrayscaleImageWithClusters image("milky-way-nvg.jpg");
+    GrayscaleImageWithClusters image("milky-way-nvg.jpg", 2);
     CMeansClustering clustering(image, 2);
     
     return 0;
