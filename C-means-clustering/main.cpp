@@ -4,7 +4,7 @@
 int main()
 {
     // Load the image in grayscale (black and white)
-    GrayscaleImageWithClusters image("milky-way-nvg.jpg", 2);
+    GrayscaleImageWithClusters image("milky-way-nvg.jpg", 5);
     image.DisplayClusters();
     CMeansClustering clustering(image);
     clustering.RunClustering(20, 2);

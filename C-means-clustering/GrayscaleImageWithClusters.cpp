@@ -39,6 +39,7 @@ void GrayscaleImageWithClusters::DisplayClusters() const
 		}
 	}
 	//display the result and wait for input.
+	cv::imshow("Original picture", image);
 	for (int cluster = 0; cluster < clusterCount; ++cluster)
 	{
 		cv::imshow("Cluster " + std::to_string(cluster), clusterMaps[cluster]);
@@ -61,16 +62,14 @@ float GrayscaleImageWithClusters::GetMembershipAt(int pixelIndex, int clusterInd
 
 uchar GrayscaleImageWithClusters::GetPixelAt(int pixelIndex) const
 {
-	const int y = pixelIndex % image.size().width;
-	const int x = pixelIndex / image.size().height;
+	const int x = pixelIndex % image.size().width;
+	const int y = pixelIndex / image.size().height;
 	return image.at<uchar>(y, x);
 }
 
 void GrayscaleImageWithClusters::SetMembershipAt(int pixelIndex, int clusterIndex, float value)
 {
-	const int y = pixelIndex % image.size().width;
-	const int x = pixelIndex / image.size().height;
-	image.at<uchar>(y, x) = value;
+	membershipMatrix[pixelIndex][clusterIndex] = value;
 }
 
 void GrayscaleImageWithClusters::InitializeMembershipMatrix()

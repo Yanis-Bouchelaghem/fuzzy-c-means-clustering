@@ -49,6 +49,7 @@ void CMeansClustering::RunClustering(int iterationCount, int m)
 		std::cout << "Running iteration " << iteration << "...\n";
 		UpdateClusterCenters(m);
 		UpdateMembershipMatrix(m);
+
 	}
 }
 
