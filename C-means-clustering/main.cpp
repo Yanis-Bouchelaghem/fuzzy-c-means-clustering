@@ -7,6 +7,8 @@ int main()
     GrayscaleImageWithClusters image("milky-way-nvg.jpg", 2);
     image.DisplayClusters();
     CMeansClustering clustering(image);
+    clustering.RunClustering(20, 2);
+    image.DisplayClusters();
     
     return 0;
 }

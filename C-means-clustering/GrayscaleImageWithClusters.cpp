@@ -3,18 +3,19 @@
 #include <stdexcept>
 #include <random>
 #include <vector>
+#include <assert.h>
 
 GrayscaleImageWithClusters::GrayscaleImageWithClusters(const std::string& image_path, int clusterCount)
 	:
 	image(cv::imread(image_path, cv::IMREAD_GRAYSCALE)),
-	membershipMatrix(GetImagePixelCount(), std::vector<float>(clusterCount, 0.0)),
+	membershipMatrix(GetPixelCount(), std::vector<float>(clusterCount, 0.0)),
 	clusterCount(clusterCount)
 {
 	if (image.empty()) throw std::runtime_error("Failed loading image.");
 	InitializeMembershipMatrix();
 }
 
-int GrayscaleImageWithClusters::GetImagePixelCount() const
+int GrayscaleImageWithClusters::GetPixelCount() const
 {
 	return image.total();
 }
@@ -27,10 +28,9 @@ void GrayscaleImageWithClusters::DisplayClusters() const
 	{
 		clusterMaps.push_back(cv::Mat::zeros(image.size(), image.type()));
 	}
-	//Iterate over each pixel and assign the cluster color 
-	for (int pixelIndex = 0; pixelIndex < GetImagePixelCount(); ++pixelIndex)
+	//Iterate over each pixel and assign the cluster color
+	for (int pixelIndex = 0; pixelIndex < GetPixelCount(); ++pixelIndex)
 	{
-		//Determine the x and y position of the clusterMap corresponding to the current pixel
 		const int y = pixelIndex % image.size().width;
 		const int x = pixelIndex / image.size().height;
 		for (int clusterIndex = 0; clusterIndex < clusterCount; ++clusterIndex)
@@ -47,6 +47,32 @@ void GrayscaleImageWithClusters::DisplayClusters() const
 	cv::destroyAllWindows();
 }
 
+int GrayscaleImageWithClusters::GetClusterCount() const
+{
+	return clusterCount;
+}
+
+float GrayscaleImageWithClusters::GetMembershipAt(int pixelIndex, int clusterIndex) const
+{
+	assert(pixelIndex < GetPixelCount());
+	assert(clusterIndex < GetClusterCount());
+	return membershipMatrix[pixelIndex][clusterIndex];
+}
+
+uchar GrayscaleImageWithClusters::GetPixelAt(int pixelIndex) const
+{
+	const int y = pixelIndex % image.size().width;
+	const int x = pixelIndex / image.size().height;
+	return image.at<uchar>(y, x);
+}
+
+void GrayscaleImageWithClusters::SetMembershipAt(int pixelIndex, int clusterIndex, float value)
+{
+	const int y = pixelIndex % image.size().width;
+	const int x = pixelIndex / image.size().height;
+	image.at<uchar>(y, x) = value;
+}
+
 void GrayscaleImageWithClusters::InitializeMembershipMatrix()
 {
 	//Initialize the membership matrix with random numbers
@@ -54,7 +80,7 @@ void GrayscaleImageWithClusters::InitializeMembershipMatrix()
 	std::mt19937 rng(rd());
 	std::uniform_real_distribution<float> distribution(0, 1.0);
 
-	for (int pixelIndex = 0; pixelIndex < GetImagePixelCount(); ++pixelIndex)
+	for (int pixelIndex = 0; pixelIndex < GetPixelCount(); ++pixelIndex)
 	{
 		float membershipValuesSum = 0.f;
 		for (int clusterIndex = 0; clusterIndex < clusterCount; ++clusterIndex)
