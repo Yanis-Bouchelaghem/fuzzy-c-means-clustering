@@ -6,11 +6,12 @@ class GrayscaleImageWithClusters
 {
 public:
 	GrayscaleImageWithClusters(const std::string& image_path, int classCount);
-	int getImagePixelCount() const;
+	int GetImagePixelCount() const;
+	void DisplayClusters() const;
 private:
 	void InitializeMembershipMatrix();
 private:
 	cv::Mat image;
 	std::vector<std::vector<float>> membershipMatrix; // The membership matrix U.
-	const int classCount;
+	const int clusterCount;
 };

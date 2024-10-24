@@ -7,6 +7,7 @@ class CMeansClustering
 public:
 	CMeansClustering(GrayscaleImageWithClusters& image);
 
+
 private:
 	GrayscaleImageWithClusters& image;
 };
